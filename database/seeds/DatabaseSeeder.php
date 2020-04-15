@@ -20,20 +20,22 @@ class DatabaseSeeder extends Seeder
         DB::statement('SET FOREIGN_KEY_CHECKS = 0');
 
         User::truncate();
-        Provider::truncate();
-        Specification::truncate();
-        Review::truncate();
-        Price::truncate();
-        Follow::truncate();
-
+        // Provider::truncate();
+        // Specification::truncate();
+        // Review::truncate();
+        // Price::truncate();
+        // Follow::truncate();
+        $usersQuantity = 1000 ;
         User::flushEventListeners();
-        Provider::flushEventListeners();
-        Specification::flushEventListeners();        
-        Review::flushEventListeners();
-        Price::flushEventListeners();
-        Follow::flushEventListeners();
+        
+        factory(User::class, $usersQuantity)->create();
+        // Provider::flushEventListeners();
+        // Specification::flushEventListeners();        
+        // Review::flushEventListeners();
+        // Price::flushEventListeners();
+        // Follow::flushEventListeners();
 
-        $this->call(ProvidersSeeder::class);
+        //$this->call(ProvidersSeeder::class);
 
     }
 }

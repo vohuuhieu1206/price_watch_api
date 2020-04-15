@@ -21,10 +21,11 @@ class CreateProductsTable extends Migration
             $table->string('link_image',1000);
             $table->string('average_rating')->nullable();
             $table->integer('provider_id')->unsigned();
-            $table->integer('specification_id')->unsigned();
+            $table->integer('specification_id')->unsigned()->nullable();
             $table->timestamps();
             $table->softDeletes();//delete_at
 
+            $table->unique(['product_name', 'provider_id']);
             $table->foreign('provider_id')->references('id')->on('providers');
             $table->foreign('specification_id')->references('id')->on('specifications');
         });

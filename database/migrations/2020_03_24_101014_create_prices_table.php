@@ -18,7 +18,6 @@ class CreatePricesTable extends Migration
             $table->increments('id');
             $table->string('product_price');
             $table->integer('product_id')->unsigned();
-            $table->datetime('crawled_at');
             $table->timestamps();
             $table->softDeletes();//delete_at
             

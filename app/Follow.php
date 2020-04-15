@@ -5,15 +5,12 @@ namespace App;
 use App\User;
 use App\Product;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Follow extends Model
 {
     //
-    use SoftDeletes;
 
     //public $transformer = TransactionTransformer::class;
-    protected $date = ['delete_at'];
     protected $fillable = [
 		'user_id',
 		'product_id',
@@ -21,11 +18,11 @@ class Follow extends Model
     protected $hidden = [
         'pivot'
     ];
-    public function products()
+    public function product()
     {
     	return $this->belongsTo(Product::class);
     }
-    public function users()
+    public function user()
     {
     	return $this->belongsTo(User::class);
     }

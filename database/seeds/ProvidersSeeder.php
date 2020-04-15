@@ -20,15 +20,12 @@ class ProvidersSeeder extends Seeder
         $providers= [
         	'Thế giới di động',
         	'Fpt shop',
-        	'Phong vũ',
-            'Điện máy xanh',
+        	'CellphoneS',
+            'Viettel Store',
+            'Hoàng hà mobile',
+            'Điện máy chợ lớn'
         ];
-        $specifications = ['duy'];
-        foreach ($specifications as $specification){
-            Specification::firstOrCreate([
-                'display'=>$specification,
-            ]);
-        };
+        
         foreach ($providers as $provider){
         	Provider::firstOrCreate([
         		'provider_name'=>$provider,

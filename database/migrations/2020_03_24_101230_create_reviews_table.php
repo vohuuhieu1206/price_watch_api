@@ -17,13 +17,14 @@ class CreateReviewsTable extends Migration
         Schema::create('reviews', function (Blueprint $table) {
             $table->increments('id');
             $table->string('reviewer_name');
-            $table->text('review_content');
-            $table->text('link_image_review');
+            $table->text('review_content')->nullable();
+            $table->text('link_image_review')->nullable();
             $table->string('rating')->nullable();
             $table->integer('product_id')->unsigned();
             $table->timestamps();
             $table->softDeletes();//delete_at
             
+            $table->unique(['reviewer_name', 'review_content', 'product_id']);
             $table->foreign('product_id')->references('id')->on('products');
         });
     }

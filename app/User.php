@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Follow;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -81,5 +82,9 @@ class User extends Authenticatable
     public static function generateVerificationCode()
     {
         return str_random(40);
+    }
+    public function follows()
+    {
+        return $this->hasMany(Follow::class);
     }
 }
