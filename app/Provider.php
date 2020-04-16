@@ -4,6 +4,7 @@ namespace App;
 
 use App\Product;
 use Illuminate\Database\Eloquent\Model;
+use App\Transformers\ProviderTransformer;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Provider extends Model
@@ -11,7 +12,7 @@ class Provider extends Model
     //
     use SoftDeletes;
 
-    //public $transformer = CategoryTransformer::class;
+    public $transformer = ProviderTransformer::class;
     protected $date = ['delete_at'];
     protected $fillable = [
     	'provider_name',

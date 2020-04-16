@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Product;
+use App\Transformers\PriceTransformer;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -11,7 +12,7 @@ class Price extends Model
     //
     use SoftDeletes;
 
-    //public $transformer = TransactionTransformer::class;
+    public $transformer = PriceTransformer::class;
     protected $date = ['delete_at'];
     protected $fillable = [
     	'product_price',

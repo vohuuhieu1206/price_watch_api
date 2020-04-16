@@ -2,6 +2,7 @@
 
 namespace App\Http;
 
+
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
 class Kernel extends HttpKernel
@@ -41,6 +42,9 @@ class Kernel extends HttpKernel
             'throttle:60,1',
             'bindings',
         ],
+        'cors' => [
+            \Barryvdh\Cors\HandleCors::class,
+        ]
     ];
 
     /**
@@ -60,8 +64,8 @@ class Kernel extends HttpKernel
         'signed' => \Illuminate\Routing\Middleware\ValidateSignature::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
-    ];
-
+        'transform.input' => \App\Http\Middleware\TransformInput::class,
+    ];  
     /**
      * The priority-sorted list of middleware.
      *

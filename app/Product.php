@@ -8,6 +8,7 @@ use App\Review;
 use App\Provider;
 use App\Specification;
 use Illuminate\Database\Eloquent\Model;
+use App\Transformers\ProductTransformer;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Product extends Model
@@ -15,7 +16,7 @@ class Product extends Model
     //
     use SoftDeletes;
     
-    //public $transformer = ProductTransformer::class;
+    public $transformer = ProductTransformer::class;
     protected $date = ['delete_at'];
     protected $fillable=[
     	'product_name',

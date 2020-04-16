@@ -27,8 +27,7 @@ Route::name('realprice')->get('products/{product}/realprice','Product\ProductPri
 Route::resource('products.reviews', 'Product\ProductReviewsController',['only' => ['index']]);
 Route::resource('products.provider', 'Product\ProductProviderController',['only' => ['index']]);
 Route::resource('products.specification', 'Product\ProductSpecificationController',['only' => ['index']]);
-// Route::resource('products.reivews', 'Product\ProductCategoryController',['only' => ['index']]);
-// Route::resource('products.specification', 'Product\ProductBuyerTransactionController',['only' => ['index']]);
+
 /*
 *	Follow
 */

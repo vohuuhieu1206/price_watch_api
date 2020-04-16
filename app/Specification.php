@@ -6,13 +6,14 @@ use App\Product;
 use App\Provider;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Transformers\SpecificationTransformer;
 
 class Specification extends Model
 {
     //
     use SoftDeletes;
 
-    //public $transformer = CategoryTransformer::class;
+    public $transformer = SpecificationTransformer::class;
     protected $date = ['delete_at'];
     protected $fillable = [
         'display',
