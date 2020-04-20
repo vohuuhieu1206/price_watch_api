@@ -3,7 +3,9 @@
 namespace App\Transformers;
 
 use App\Product;
+use App\Transformers\PriceTransformer;
 use League\Fractal\TransformerAbstract;
+use App\Transformers\ProviderTransformer;
 
 class ProductTransformer extends TransformerAbstract
 {
@@ -12,10 +14,14 @@ class ProductTransformer extends TransformerAbstract
      *
      * @return array
      */
+    // public $availableIncludes = [
+    //     'price','provider'
+    // ];
+    // protected $defaultIncludes = [
+    //     'price','provider'
+    // ];
     public function transform(Product $product)
     {
-        $price = $product->prices()->orderBy('created_at','DESC')->pluck('product_price')->first();
-        $provider = $product->provider()->pluck('provider_name')->first();
         return [
             //
             'identifier' => (int)$product->id,
@@ -23,8 +29,8 @@ class ProductTransformer extends TransformerAbstract
             'link' => (string)$product->product_link,
             'image' => (string)$product->link_image,
             'rating' => (string)$product->average_rating,
-            'price' => $price,
-            'provider' =>$provider,
+            'price'=>(int)$product->price,
+            'provider'=>(string)$product->provider,
             'specification_id' => (int)$product->specification_id,
             'crawlDate' => (string)$product->created_at,
             'crawlUpdate' => (string)$product->updated_at,
@@ -61,6 +67,8 @@ class ProductTransformer extends TransformerAbstract
             'link' => 'product_link',
             'image' => 'link_image',
             'rating' => 'average_rating',
+            'price'=>'price',
+            'provider' => 'provider',
             'provider_id' => 'provider_id',
             'specification_id' => 'specification_id',
             'crawlDate' => 'created_at',
@@ -77,6 +85,8 @@ class ProductTransformer extends TransformerAbstract
             'product_link' =>'link',
             'link_image' =>'image',
             'average_rating' =>'rating',
+            'price'=>'price',
+            'provider' => 'provider',
             'provider_id' =>'provider_id',
             'specification_id' =>'specification_id',
             'created_at' =>'crawlDate',
@@ -85,4 +95,16 @@ class ProductTransformer extends TransformerAbstract
         ];
         return isset($attributes[$index]) ? $attributes[$index] : null ;
     }
+    // public function includePrice(Product $product)
+    // {
+    //     $price = $product->prices->sortByDesc('created_at');
+    //     return $this->collection($price->take(1), new PriceTransformer());
+
+    // }
+    // public function includeProvider(Product $product)
+    // {
+    //     $provider =$product->provider;
+    //     return $this->item($provider, new ProviderTransformer());
+    // }
+
 }

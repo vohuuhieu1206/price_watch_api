@@ -39,6 +39,7 @@ class Kernel extends HttpKernel
         ],
 
         'api' => [
+            'cors',
             'throttle:60,1',
             'bindings',
         ],
@@ -65,6 +66,8 @@ class Kernel extends HttpKernel
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'transform.input' => \App\Http\Middleware\TransformInput::class,
+        'jwt-auth' => \App\Http\Middleware\jwtMiddleware::class,
+        'cors' => \Barryvdh\Cors\HandleCors::class,
     ];  
     /**
      * The priority-sorted list of middleware.

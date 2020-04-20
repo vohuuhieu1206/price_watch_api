@@ -16,7 +16,8 @@ class ProductSpecificationController extends ApiController
     {
 
         $specification = $product->specification;
-        
+        $product = $product->pluck('product_name')->first();       
+        $specification["product"] = $product;
         return $this->showOne($specification);
     }
 }

@@ -21,7 +21,11 @@ class ProductReviewsController extends ApiController
     {
 
         $reviews = $product->reviews;
-        
+        foreach($reviews as $key => $review)
+        {
+            $product = $review->product()->pluck('product_name')->first();   
+            $review["product"] = $product;
+        }
         return $this->showAll($reviews);
     }
 

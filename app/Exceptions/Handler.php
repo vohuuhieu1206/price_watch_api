@@ -60,21 +60,18 @@ class Handler extends ExceptionHandler
     public function render($request, Exception $exception)
     {
         $response = $this->handleException($request,$exception);
+        app(CorsService::class)->addActualRequestHeaders($response,$request);
         return $response;
     }
     public function handleException($request, Exception $exception){
-        // if($exception instanceof ValidationException){
-        //     return $this->convertValidationExceptionToResponse($exception,$request);
-        // }
+        if($exception instanceof ValidationException){
+            return $this->convertValidationExceptionToResponse($exception,$request);
+        }
         if($exception instanceof ModelNotFoundException){
             $modelName = strtolower(class_basename($exception->getModel()));
             return $this->errorResponse("Does not exits any {$modelName} with the specified identificator",404);
         }
         if($exception instanceof AuthenticationException){
-            if($this->isFrontend($request))
-            {
-                return redirect()->guest('login');
-            }
             return $this->errorResponse("Unauthentication. ",401);
         }
         if($exception instanceof AuthorizationException){
@@ -93,6 +90,9 @@ class Handler extends ExceptionHandler
             $errorCode = $exception->errorInfo[1];
             if($errorCode == 1451){
                 return $this->errorResponse("Cannot remove this resource permanently. It is related with any other resource",409);
+            }
+            if($errorCode == 1062){
+                return $this->errorResponse("Only add one",409);
             }
         }
         if($exception instanceof TokenMismatchException){

@@ -14,12 +14,12 @@ class UserTransformer extends TransformerAbstract
     public function transform(User $user)
     {
         return [
-            //
             'identifier' => (int)$user->id,
             'nameUser' => (string)$user->name,
             'emailUser' => (string)$user->email,
             'isVerified' => (int)$user->verified,
             'isAdmin' => ($user->admin === 'true'),
+            'verification_token' =>(string)$user->verification_token,
             'creationDate' => (string)$user->created_at,
             'lastChange' => (string)$user->update_at,
             'deleteDate' => isset($user->delele_at) ? (string) $user->deleted_at : null,
@@ -40,6 +40,8 @@ class UserTransformer extends TransformerAbstract
             'password_confirmation' => 'password_confirmation',
             'isVerified' =>'verified',
             'isAdmin' => 'admin',
+            'verification_token' => 'verification_token',
+            'auth_token' => 'auth_token',
             'creationDate' => 'created_at',
             'lastChange' => 'update_at',
             'deleteDate' => 'delele_at',
@@ -50,12 +52,14 @@ class UserTransformer extends TransformerAbstract
         $attributes = [
             //
             'id' => 'identifier',
-            'name_user' => 'nameUser',
+            'name' => 'nameUser',
             'email' => 'emailUser',
             'password' => 'password',
             'password_confirmation' => 'password_confirmation',
             'verified' =>'isVerified',
             'admin' => 'isAdmin',
+            'verification_token' => 'verification_token',
+            'auth_token' => 'auth_token',
             'created_at' => 'creationDate',
             'update_at' => 'lastChange',
             'delele_at' => 'deleteDate',

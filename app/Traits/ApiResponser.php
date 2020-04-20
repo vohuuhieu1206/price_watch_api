@@ -30,7 +30,7 @@ trait ApiResponser
 		$collection = $this->sortData($collection,$transformer);
 		$collection = $this->paginate($collection);
 		$collection = $this->transformData($collection,$transformer);
-		$collection = $this->cacheResponse($collection);
+		//$collection = $this->cacheResponse($collection);
 
 		return $this->successRespose($collection, $code);
 	}
@@ -47,11 +47,10 @@ trait ApiResponser
 	}
 	protected function filterData(Collection $collection, $transformer){
 		foreach(request()->query() as $query => $value){
-			if ($query != 'sort_by') { //Notice this
+			if ($query != 'sort_by' and $query!= 'sort_by_desc') { //Notice this
 				$attribute = $transformer::originalAttribute($query);
  
 				if (isset($attribute, $value)) {
-					//$collection = $collection->where($attribute, $value);
 					$collection = collect($collection)->filter(function ($item) use ($value,$attribute) {
 					    // replace stristr with your choice of matching function
 					    return false !== stripos($item->$attribute, $value);
@@ -73,6 +72,13 @@ trait ApiResponser
 
 			$collection = $collection->sortBy->{$attribute};
 		}
+		else 
+			if(request()->has('sort_by_desc'))
+			{
+				$attribute = $transformer::originalAttribute(request()->sort_by_desc);
+
+				$collection = $collection->sortByDesc->{$attribute};
+			}
 		return $collection;
 	}
 	protected function paginate(Collection $collection)

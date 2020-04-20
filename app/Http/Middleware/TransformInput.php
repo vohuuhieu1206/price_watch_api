@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use Closure;
+use Illuminate\Validation\ValidationException;
 
 class TransformInput
 {
@@ -24,9 +25,8 @@ class TransformInput
         $request->replace($transformedInput);
 
         $response = $next($request);
-
         if (isset($response->exception) && $response->exception instanceof ValidationException){
-
+           
             $data = $response->getData();
 
             $transformedError = [] ;

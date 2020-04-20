@@ -13,7 +13,6 @@ class SpecificationTransformer extends TransformerAbstract
      * @return array
      */
     public function transform(Specification $specification){
-        $product = $specification->products()->pluck('product_name')->first();
         $id_product = $specification->products()->pluck('id')->first();
         return [
             //
@@ -27,7 +26,7 @@ class SpecificationTransformer extends TransformerAbstract
             'cpu' => (string)$specification->cpu,
             'brand' => (string)$specification->brand,
             'storage' => (string)$specification->storage,
-            'product' =>$product,
+            'product' =>(string)$specification->product,
             'crawlDate' =>(string)$specification->created_at,
             'crawlUpdate' =>(string)$specification->updated_at,
             [
@@ -46,6 +45,7 @@ class SpecificationTransformer extends TransformerAbstract
             'batteryCapacity' => 'battery',
             'ram' => 'ram',
             'cpu' => 'cpu',
+            'product' => 'product',
             'brand' => 'brand',
             'storage' => 'storage',
             'product_id' =>'product_id',
@@ -64,6 +64,7 @@ class SpecificationTransformer extends TransformerAbstract
             'battery' =>'batteryCapacity',
             'ram' =>'ram',
             'cpu' =>'cpu',
+            'product' => 'product',
             'brand' =>'brand',
             'storage' =>'storage',
             'product_id' =>'product_id',

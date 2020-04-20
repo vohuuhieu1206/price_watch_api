@@ -4,15 +4,17 @@ namespace App;
 
 use App\User;
 use App\Product;
+use App\Transformers\FollowTransformer;
 use Illuminate\Database\Eloquent\Model;
 
 class Follow extends Model
 {
     //
 
-    //public $transformer = TransactionTransformer::class;
+    public $transformer = FollowTransformer::class;
     protected $fillable = [
-		'user_id',
+		'id',
+        'user_id',
 		'product_id',
     ];
     protected $hidden = [

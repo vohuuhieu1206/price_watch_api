@@ -2,9 +2,13 @@
 
 namespace App\Http\Controllers\User;
 
+use JWTAuth;
 use App\User;
+use JWTAuthException;
 use App\Mail\UserCreated;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use App\Transformers\UserTransformer;
 use App\Http\Controllers\ApiController;
@@ -19,9 +23,10 @@ class UserController extends ApiController
      */
     public function __construct()
     {
-        $this->middleware('transform.input:'.UserTransformer::class)->only(['update','store']);
-        // $this->middleware('client.credentials')->only(['store','resend']);        
-        // $this->middleware('auth:api')->except(['store','verified','resend']);
+
+        $this->middleware('transform.input:'.UserTransformer::class)->only(['update','store','login']);
+        
+        //$this->middleware('client.credentials')->only(['store','resend']);        
         
         // $this->middleware('scope:manage-account')->only(['show'],['update']);
         // $this->middleware('can:view,user')->only(['show']);
@@ -112,10 +117,22 @@ class UserController extends ApiController
         $data['verified'] = User::UNVERIFIED_USER;
         $data['verification_token'] = User::generateVerificationCode();
         $data['admin'] = User::REGULAR_USER;
-
+        $data['auth_token'] = '';
         $user = User::create($data);
+        if ($user)
+        {
 
-        return $this->showOne($user);
+            $token = self::getToken($request->email, $request->password);
+            if (!is_string($token))  return response()->json(['success'=>false,'data'=>'Token generation failed'], 201);
+
+            $user = User::where('email', $request->email)->get()->first();
+
+            $user->auth_token = $token; 
+            $user->save();
+            return $this->showOne($user);      
+        }
+        else
+            return $this->errorResponse('Register Failed',422);
     }
 
     /**
@@ -155,21 +172,59 @@ class UserController extends ApiController
 
         return $this->showMessage('The account has been verified successly');
     }
-    public function resendMail(User $user)
-    {
-        if($user->isVerified())
-        {
-            $this->errorResponse("The account is already verified",409);
-        }
-       retry(5, function () use ($user){
-                Mail::to($user)->send(new UserCreated($user));
-            },100);
 
-        return $this->showMessage('The verification mail has been resend');
-    }
-    public function me(Request $request)
+    private function getToken($email, $password)
     {
-        $user = $request->user();
-        return $this->showOne($user);
+        $token = null;
+        try {
+            if (!$token = JWTAuth::attempt( ['email'=>$email, 'password'=>$password])) {
+                return response()->json([
+                    'response' => 'error',
+                    'message' => 'Password or email is invalid',
+                    'token'=>$token
+                ]);
+            }
+        } catch (JWTAuthException $e) {
+
+            return response()->json([
+                'response' => 'error',
+                'message' => 'Cannot create token',
+            ]);
+        }
+        return $token;
+    }
+
+    public function login(Request $request)
+    {
+        $rules = [
+            'email' => 'required|email',
+            'password' => 'required',
+        ];
+        $this->validate($request, $rules);        
+
+        $user = User::where('email', $request->email)->get()->first();
+        if ($user && \Hash::check($request->password, $user->password))
+        {
+            $token = self::getToken($request->email, $request->password);
+            $user->auth_token = $token;
+            $user->save();
+            $response = ['success'=> true, 'auth_token'=>$user->auth_token];           
+        }
+        else 
+          $response = ['success' => false,'data' => 'User doesnt exist'];
+
+        return response()->json($response, 201);
+    }
+    public function logout() {
+        Auth::guard('api')->logout();
+        return response()->json([
+            'status' => 'success',
+            'message' => 'logout'
+        ], 200);
+    }
+    public function refresh() {
+        $token = Auth::guard('api')->refresh();
+        $response = ['success'=> true, 'auth_token'=>$token];
+        return response()->json($response, 200);
     }
 }

@@ -4,12 +4,13 @@ namespace App;
 
 use App\Follow;
 use App\Transformers\UserTransformer;
+use Tymon\JWTAuth\Contracts\JWTSubject;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class User extends Authenticatable
+class User extends Authenticatable implements JWTSubject
 {
    use Notifiable, SoftDeletes;
    //, HasApiTokens;
@@ -36,6 +37,7 @@ class User extends Authenticatable
         'verified',
         'verification_token',
         'admin',
+        'auth_token',
     ];
 
     /**
@@ -84,8 +86,17 @@ class User extends Authenticatable
     {
         return str_random(40);
     }
+    public function getJWTIdentifier()
+    {
+        return $this->getKey();
+    }
+    public function getJWTCustomClaims()
+    {
+        return [];
+    }
     public function follows()
     {
         return $this->hasMany(Follow::class);
     }
+
 }

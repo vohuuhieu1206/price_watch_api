@@ -14,11 +14,10 @@ class PriceTransformer extends TransformerAbstract
      */
     public function transform(Price $price)
     {
-        $product = $price->product()->pluck('product_name')->first();
         return [
             //
             'identifier' => (int)$price->id,
-            'product' => $product,
+            'product' => (string)$price->product,
             'price' => (string)$price->product_price,
             'crawlDate' => (string)$price->created_at,
             'links' => 
@@ -32,6 +31,7 @@ class PriceTransformer extends TransformerAbstract
         $attributes = [
             'identifier' => 'id',
             'product_id' => 'product_id',
+            'product' => 'product',
             'price' => 'product_price',
             'crawlDate' => 'created_at',
         ];
@@ -41,6 +41,7 @@ class PriceTransformer extends TransformerAbstract
         $attributes = [
             'id' => 'identifier',
             'product_id' => 'product_id',
+            'product' => 'product',
             'product_price' => 'price',
             'created_at' => 'crawlDate',
         ];

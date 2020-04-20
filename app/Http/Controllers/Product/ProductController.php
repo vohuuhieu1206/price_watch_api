@@ -21,7 +21,20 @@ class ProductController extends ApiController
     public function index()
     {
         //
+        // $array = array();
         $products = Product::all();
+        foreach($products as $key => $product)
+        {
+            $price = $product->prices()->orderBy('created_at','DESC')->pluck('product_price')->first();        
+            $product["price"] = str_replace('.','', $price);
+            if($product["price"] == 0) {
+                $products->forget($key);
+            }
+            else{
+                $provider = $product->provider()->pluck('provider_name')->first();
+                $product["provider"] = $provider;
+            }
+        }
 
         return $this->showAll($products);
     }
@@ -36,7 +49,11 @@ class ProductController extends ApiController
     public function show(Product $product)
     {
         //
-         return $this->showOne($product);
+        $price = $product->prices()->orderBy('created_at','DESC')->pluck('product_price')->first();        
+        $product["price"] = str_replace('.','', $price);
+        $provider = $product->provider()->pluck('provider_name')->first();
+        $product["provider"] = $provider;
+        return $this->showOne($product);
     }
 
    

@@ -24,7 +24,7 @@ class DatabaseSeeder extends Seeder
         // Specification::truncate();
         // Review::truncate();
         // Price::truncate();
-        // Follow::truncate();
+        Follow::truncate();
         $usersQuantity = 1000 ;
         User::flushEventListeners();
         

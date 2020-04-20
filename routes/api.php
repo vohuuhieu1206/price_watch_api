@@ -31,13 +31,30 @@ Route::resource('products.specification', 'Product\ProductSpecificationControlle
 /*
 *	Follow
 */
-Route::resource('follows', 'Follow\FollowController',['only' => ['index','store','destroy']]);
+
 /*
 *	User
 */
 // Route::name('me')->get('users/me','User\UserController@me');
 
 Route::resource('users', 'User\UserController',['except' => ['create','edit']]);
-Route::resource('users.products', 'User\UserFollowProductController',['only' => ['index']]);
-Route::name('verify')->get('users/verify/{token}','User\UserController@verified');
-Route::name('resend')->get('users/{user}/resend','User\UserController@resendMail');
+// Route::resource('users.products', 'User\UserFollowProductController',['only' => ['index']]);
+
+
+
+Route::get('verify/{token}','User\UserController@verified');
+
+Route::name('login')->post('login', 'User\UserController@login');
+
+
+
+Route::middleware('auth:api')->group(function () {
+
+	Route::resource('me', 'Me\MeController',['only' => ['index']]);
+	Route::resource('me/products', 'Me\MeProductController',['only' => ['index','destroy']]);
+	Route::resource('me/products.follows', 'Me\MeProductFollowController',['only' => ['store']]);
+    
+    Route::get('/logout','User\UserController@logout');
+    Route::get('/refresh', 'User\UserController@refresh');
+    Route::resource('follows', 'Follow\FollowController',['only' => ['index']]);
+});

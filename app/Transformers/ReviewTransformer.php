@@ -14,7 +14,7 @@ class ReviewTransformer extends TransformerAbstract
      */
     public function transform(Review $review)
     {
-        $product = $review->product()->pluck('product_name')->first();
+
         return [
             //
             'identifier' => (int)$review->id,
@@ -22,7 +22,7 @@ class ReviewTransformer extends TransformerAbstract
             'content' => (string)$review->review_content,
             'image' => (string)$review->link_image_review,
             'star' => (string)$review->rating,
-            'product' => $product,
+            'product' => (string)$review->product,
             'crawlDate' => (string)$review->created_at,
             'crawlUpdate' => (string)$review->updated_at,
             'links' => 
@@ -39,6 +39,7 @@ class ReviewTransformer extends TransformerAbstract
             'content' => 'review_content',
             'image' => 'link_image_review',
             'star' => 'rating',
+            'product' => 'product',
             'product_id' => 'product_id',
             'crawlDate' => 'created_at',
             'crawlUpdate' => 'updated_at',
@@ -52,6 +53,7 @@ class ReviewTransformer extends TransformerAbstract
             'review_content' =>'content',
             'link_image_review' =>'image',
             'rating' =>'star',
+            'product' => 'product',
             'product_id' =>'product_id',
             'created_at' =>'crawlDate',
             'updated_at' =>'crawlUpdate',
