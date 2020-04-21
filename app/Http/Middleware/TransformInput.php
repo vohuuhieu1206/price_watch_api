@@ -26,7 +26,7 @@ class TransformInput
 
         $response = $next($request);
         if (isset($response->exception) && $response->exception instanceof ValidationException){
-           
+            
             $data = $response->getData();
 
             $transformedError = [] ;
@@ -34,8 +34,9 @@ class TransformInput
             foreach($data->error as $field => $error){
 
                 $transformedField = $transformer::transformedlAttribute($field);
-
+                $field = str_replace('_',' ',strtolower($field));
                 $transformedError[$transformedField] = str_replace($field, $transformedField, $error);
+
             }
 
             $data->error = $transformedError;

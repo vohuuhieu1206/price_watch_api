@@ -5,6 +5,7 @@ use App\Price;
 use App\Follow;
 use App\Review;
 use App\Provider;
+use App\NewsLetter;
 use App\Specification;
 use Illuminate\Database\Seeder;
 
@@ -25,10 +26,17 @@ class DatabaseSeeder extends Seeder
         // Review::truncate();
         // Price::truncate();
         Follow::truncate();
+        NewsLetter::truncate();
+
         $usersQuantity = 1000 ;
+        $newslettersQuantity = 1000 ;
+
         User::flushEventListeners();
+        NewsLetter::flushEventListeners();
         
         factory(User::class, $usersQuantity)->create();
+        factory(NewsLetter::class, $newslettersQuantity)->create();
+
         // Provider::flushEventListeners();
         // Specification::flushEventListeners();        
         // Review::flushEventListeners();

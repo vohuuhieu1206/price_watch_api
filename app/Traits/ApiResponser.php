@@ -30,7 +30,7 @@ trait ApiResponser
 		$collection = $this->sortData($collection,$transformer);
 		$collection = $this->paginate($collection);
 		$collection = $this->transformData($collection,$transformer);
-		//$collection = $this->cacheResponse($collection);
+		$collection = $this->cacheResponse($collection);
 
 		return $this->successRespose($collection, $code);
 	}

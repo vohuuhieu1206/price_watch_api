@@ -25,14 +25,6 @@ class UserController extends ApiController
     {
 
         $this->middleware('transform.input:'.UserTransformer::class)->only(['update','store','login']);
-        
-        //$this->middleware('client.credentials')->only(['store','resend']);        
-        
-        // $this->middleware('scope:manage-account')->only(['show'],['update']);
-        // $this->middleware('can:view,user')->only(['show']);
-        // $this->middleware('can:update,user')->only(['update']);
-        // $this->middleware('can:delete,user')->only(['destroy']);
-
     }
     /**
      * Display a listing of the resource.
@@ -41,8 +33,7 @@ class UserController extends ApiController
      */
     public function index()
     {
-        //
-        // $this->allowedAdminAction();
+
         
         $users = User::all();
 
@@ -60,7 +51,6 @@ class UserController extends ApiController
         $rules = [
             'email' => 'email|unique:users,email,'. $user->id,
             'password' => 'min:6|confirmed',
-            'admin' => 'in:' . User::ADMIN_USER . ',' . User::REGULAR_USER,
         ];
 
         $this->validate($request, $rules);
@@ -77,16 +67,6 @@ class UserController extends ApiController
         if($request->has('password')){
             $user->password = bcrypt($request->password);
         }
-        // if($request->has('admin')){
-        //     $this->allowedAdminAction();
-        
-        //     if(!$user->isVerified())
-        //     {
-        //         return $this->errorResponse('Only verified users can modify the admin field',409);
-        //     }
-        //     $user->admin = $request->admin;
-        // }
-
         if($user->isClean()){
             return $this->errorResponse('You need to specify a different value to update',422);
         }
@@ -116,7 +96,6 @@ class UserController extends ApiController
         $data['password'] = bcrypt($request->password);
         $data['verified'] = User::UNVERIFIED_USER;
         $data['verification_token'] = User::generateVerificationCode();
-        $data['admin'] = User::REGULAR_USER;
         $data['auth_token'] = '';
         $user = User::create($data);
         if ($user)
@@ -148,7 +127,7 @@ class UserController extends ApiController
     }
   
     /**
-     * Remove the specified resource from storage.
+     * Remove the specified resource from storage.=
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
@@ -208,12 +187,12 @@ class UserController extends ApiController
             $token = self::getToken($request->email, $request->password);
             $user->auth_token = $token;
             $user->save();
-            $response = ['success'=> true, 'auth_token'=>$user->auth_token];           
+            $response = ['success'=> true, 'auth_token'=>$user->auth_token];        
         }
         else 
           $response = ['success' => false,'data' => 'User doesnt exist'];
 
-        return response()->json($response, 201);
+        return response()->json($response, 200);
     }
     public function logout() {
         Auth::guard('api')->logout();

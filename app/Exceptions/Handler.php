@@ -64,9 +64,9 @@ class Handler extends ExceptionHandler
         return $response;
     }
     public function handleException($request, Exception $exception){
-        if($exception instanceof ValidationException){
-            return $this->convertValidationExceptionToResponse($exception,$request);
-        }
+        // if($exception instanceof ValidationException){
+        //     return $this->convertValidationExceptionToResponse($exception,$request);
+        // }
         if($exception instanceof ModelNotFoundException){
             $modelName = strtolower(class_basename($exception->getModel()));
             return $this->errorResponse("Does not exits any {$modelName} with the specified identificator",404);

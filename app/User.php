@@ -18,12 +18,10 @@ class User extends Authenticatable implements JWTSubject
     const VERIFIED_USER = '1';
     const UNVERIFIED_USER = '0';
 
-    const ADMIN_USER = 'true';
-    const REGULAR_USER = 'false';
 
     public $transformer = UserTransformer::class;
 
-    //protected $table = 'users';
+ 
     protected $date = ['delete_at'];
     /**
      * The attributes that are mass assignable.
@@ -78,9 +76,6 @@ class User extends Authenticatable implements JWTSubject
 
     public function isVerified(){
         return $this->verified == User::VERIFIED_USER;
-    }
-    public function isAdmin(){
-        return $this->admin == User::ADMIN_USER;
     }
     public static function generateVerificationCode()
     {

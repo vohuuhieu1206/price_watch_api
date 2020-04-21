@@ -29,8 +29,9 @@ Route::resource('products.provider', 'Product\ProductProviderController',['only'
 Route::resource('products.specification', 'Product\ProductSpecificationController',['only' => ['index']]);
 
 /*
-*	Follow
+*	Newsletters
 */
+Route::resource('newsletters', 'NewsLetter\NewsLetterController',['only' => ['index','store','destroy']]);
 
 /*
 *	User
@@ -51,6 +52,8 @@ Route::name('login')->post('login', 'User\UserController@login');
 Route::middleware('auth:api')->group(function () {
 
 	Route::resource('me', 'Me\MeController',['only' => ['index']]);
+	Route::put('me', 'Me\MeController@update');
+
 	Route::resource('me/products', 'Me\MeProductController',['only' => ['index','destroy']]);
 	Route::resource('me/products.follows', 'Me\MeProductFollowController',['only' => ['store']]);
     

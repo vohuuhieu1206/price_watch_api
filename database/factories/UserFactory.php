@@ -2,6 +2,7 @@
 
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 use App\User;
+use App\NewsLetter;
 use Illuminate\Support\Str;
 use Faker\Generator as Faker;
 
@@ -24,7 +25,12 @@ $factory->define(User::class, function (Faker $faker) {
         'remember_token' => Str::random(10),
         'verified' => $verified = $faker->randomElement([User::VERIFIED_USER, User::UNVERIFIED_USER]),
         'verification_token' => $verified == User::VERIFIED_USER ? null : User::generateVerificationCode(),
-        'admin' => $admin = $faker->randomElement([User::ADMIN_USER, User::REGULAR_USER]),
+    ];
+});
+$factory->define(NewsLetter::class, function (Faker $faker) {
+    return [
+        'guest_name' => $faker->name,
+        'guest_email' => $faker->unique()->safeEmail,
     ];
 });
 

@@ -24,6 +24,18 @@ class MeProductController extends ApiController
                         ->with('product')
                         ->get()
                         ->pluck('product');
+        foreach($products as $key => $product)
+        {
+            $price = $product->prices()->orderBy('created_at','DESC')->pluck('product_price')->first();        
+            $product["price"] = str_replace('.','', $price);
+            if($product["price"] == 0) {
+                $products->forget($key);
+            }
+            else{
+                $provider = $product->provider()->pluck('provider_name')->first();
+                $product["provider"] = $provider;
+            }
+        }
         return $this->showAll($products);
     }
  
@@ -41,7 +53,7 @@ class MeProductController extends ApiController
         if($follow = $product->follows()->where('user_id',$user_id))
         {
             $follow->delete();
-            return response()->json(['success' => 'Da xoa thanh cong' , 'code' => 200],200);
+            return response()->json(['success' => 'Delete success' , 'code' => 200],200);
         }
         else
         {
