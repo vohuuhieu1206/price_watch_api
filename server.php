@@ -1,13 +1,17 @@
 <?php
-header('Access-Control-Allow-Origin: *');
-header('Access-Control-Allow-Methods: GET, PUT, POST, DELETE, OPTIONS');
-//Cor
+
 /**
  * Laravel - A PHP Framework For Web Artisans
  *
  * @package  Laravel
  * @author   Taylor Otwell <taylor@laravel.com>
  */
+
+// CORS handler - header('Access-Control-Allow-Origin: http://localhost:3000');
+
+// header('Access-Control-Allow-Origin:  *');
+// header('Access-Control-Allow-Headers:  *');
+// header('Access-Control-Allow-Methods:  GET, POST, PUT');
 
 $uri = urldecode(
     parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH)
@@ -19,5 +23,6 @@ $uri = urldecode(
 if ($uri !== '/' && file_exists(__DIR__.'/public'.$uri)) {
     return false;
 }
+
 
 require_once __DIR__.'/public/index.php';
