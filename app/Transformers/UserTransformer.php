@@ -2,6 +2,7 @@
 
 namespace App\Transformers;
 use App\User;
+use App\Transformers\FollowTransformer;
 use League\Fractal\TransformerAbstract;
 
 class UserTransformer extends TransformerAbstract
@@ -11,6 +12,9 @@ class UserTransformer extends TransformerAbstract
      *
      * @return array
      */
+    protected $availableIncludes = [
+        'products'
+    ];
     public function transform(User $user)
     {
         return [
@@ -62,5 +66,23 @@ class UserTransformer extends TransformerAbstract
             'delele_at' => 'deleteDate',
         ];
         return isset($attributes[$index]) ? $attributes[$index] : null ;
-    } 
+    }
+    public function includeProducts(User $user)
+    {
+        $follows = $user->follows;
+        foreach($follows as $key => $follow)
+        {
+
+            $price = $follow->product->prices()->orderBy('created_at','DESC')->pluck('product_price')->first();    
+            $follow["price"] = (int)str_replace('.','', $price);
+            if($follow["price"] == 0) {
+                $follow->forget($key);
+            }
+            else{
+                $product = $follow->product()->pluck('product_name')->first();
+                $follow["nameProduct"] = $product;
+            }
+        }                   
+        return $this->collection($follows, new FollowTransformer);
+    }
 }

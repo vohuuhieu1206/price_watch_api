@@ -13,25 +13,27 @@ class FollowTransformer extends TransformerAbstract
      *
      * @return array
      */
-    public function transform(Follow $follow)
+    public function transform()
     {
-        $product = $follow->product()->pluck('product_name')->first();
-        $user = Auth::guard('api')->user()->pluck('name')->first();
         return [
             //
             'identifier' =>(int)$follow->id,
-            'nameProduct' => (string)$product,
-            'nameUser' => (string)$user,
-            'links' => 
-            [
-                'rel' => 'product',
-                'href' => route('products.show', $follow->product_id),
-            ],
-            [
-                'rel' => 'me',
-                'href' => route('me.index'),
-            ]
+            'nameProduct' => (string)$follow->nameProduct,
+            'price'=>(int)$follow->price,
         ];
     }
-    public f
+    public static function originalAttribute($index){
+         $attributes = [
+            //
+            'identifier' => 'id',
+        ];
+        return isset($attributes[$index]) ? $attributes[$index] : null ;
+    }
+    public static function transformedlAttribute($index){
+        $attributes = [
+            //
+            'id' => 'identifier',
+        ];
+        return isset($attributes[$index]) ? $attributes[$index] : null ;
+    } 
 }

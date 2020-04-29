@@ -9,11 +9,6 @@ use Illuminate\Database\QueryException;
 
 class FollowController extends ApiController
 {
-    public function __construct()
-    {
-
-
-    }
     /**
      * Display a listing of the resource.
      *
@@ -22,9 +17,28 @@ class FollowController extends ApiController
     public function index()
     {
         //
-        $follows = Follow::all();
-
-        return $this->showAll($follows);
+        $users = User::WhereHas('follows')
+                       ->with('follows')
+                       ->get();
+        foreach($users as $key => $user)
+        {
+            $products = $user->follows()
+                            ->whereHas('product')
+                            ->with('product')
+                            ->get()
+                            ->pluck('product');
+            foreach($products as $key => $product)
+            {
+                $price = $product->prices()->orderBy('created_at','DESC')->pluck('product_price')->first();        
+                $product["price"] = str_replace('.','', $price);
+                if($product["price"] == 0) {
+                    $products->forget($key);
+                }
+                $product["name"] = $product->product_name;
+            }
+            return $this->showAll($products);
+        }                   
+        $follows = $users->follows()->get();
     }
 
 

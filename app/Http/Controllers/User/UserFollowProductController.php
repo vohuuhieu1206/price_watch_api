@@ -12,26 +12,12 @@ class UserFollowProductController extends ApiController
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(User $user)
+    public function index()
     {
         //
-        $products = $user->follows()
-                        ->whereHas('product')
-                        ->with('product')
-                        ->get()
-                        ->pluck('product');
-        foreach($products as $key => $product)
-        {
-            $price = $product->prices()->orderBy('created_at','DESC')->pluck('product_price')->first();        
-            $product["price"] = str_replace('.','', $price);
-            if($product["price"] == 0) {
-                $products->forget($key);
-            }
-            else{
-                $provider = $product->provider()->pluck('provider_name')->first();
-                $product["provider"] = $provider;
-            }
-        }
-        return $this->showAll($products);
+        $users = User::WhereHas('follows')
+                               ->with('follows')
+                               ->get();
+        return $this->showAll($users);
     }
 }

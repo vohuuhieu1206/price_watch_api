@@ -39,7 +39,7 @@ Route::resource('newsletters', 'NewsLetter\NewsLetterController',['only' => ['in
 // Route::name('me')->get('users/me','User\UserController@me');
 
 Route::resource('users', 'User\UserController',['except' => ['create','edit']]);
-// Route::resource('users.products', 'User\UserFollowProductController',['only' => ['index']]);
+Route::resource('usersFollows', 'User\UserFollowProductController',['only' => ['index']]);
 
 
 
@@ -48,7 +48,7 @@ Route::get('verify/{token}','User\UserController@verified');
 Route::name('login')->post('login', 'User\UserController@login');
 
 
-
+Route::resource('follows', 'Follow\FollowController',['only' => ['index']]);
 Route::middleware('auth:api')->group(function () {
 
 	Route::resource('me', 'Me\MeController',['only' => ['index']]);
@@ -59,5 +59,5 @@ Route::middleware('auth:api')->group(function () {
     
     Route::get('/logout','User\UserController@logout');
     Route::get('/refresh', 'User\UserController@refresh');
-    Route::resource('follows', 'Follow\FollowController',['only' => ['index']]);
+    
 });
