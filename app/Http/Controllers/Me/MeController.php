@@ -32,7 +32,6 @@ class MeController extends ApiController
         
         $user = Auth::guard('api')->user();
         $rules = [
-            'email' => 'email|unique:users,email,'. $user->id,
             'password' => 'min:6|confirmed',
         ];
 
@@ -42,11 +41,6 @@ class MeController extends ApiController
             $user->name = $request->name;
         }
 
-        if($request->has('email') && $user->email != $request->email){
-            $user->verified = User::UNVERIFIED_USER;
-            $user->verification_token = User::generateVerificationCode();
-            $user->email = $request->email;
-        }
         if($request->has('password')){
             $user->password = bcrypt($request->password);
         }
