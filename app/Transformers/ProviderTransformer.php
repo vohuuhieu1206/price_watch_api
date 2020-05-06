@@ -19,6 +19,7 @@ class ProviderTransformer extends TransformerAbstract
             //
             'identifier' => (int)$provider->id,
             'name' => (string)$provider->provider_name,
+            'linkLogo' =>(string)$provider->link_logo,
         ];
     }
     public static function originalAttribute($index){

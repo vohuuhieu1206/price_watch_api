@@ -34,7 +34,9 @@ class MeProductController extends ApiController
             }
             else{
                 $provider = $product->provider()->pluck('provider_name')->first();
+                $link_logo = $product->provider()->pluck('link_logo')->first();
                 $product["provider"] = $provider;
+                $product["link_logo"] = $link_logo;
             }
         }
         return $this->showAll($products);

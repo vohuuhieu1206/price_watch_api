@@ -57,18 +57,16 @@ trait ApiResponser
 					    if(stripos($value," "))
 					    {
 					    	$values = explode(" ",$value);
+					    	$no = 0;
+					    	$check = -1;
 						    foreach($values as $str)
 						    {
 						    	$check = stripos($item->$attribute,$str);
-						    	if($check == 0){
-						    		$no = 1;
-						    	}
-						    	else
-						    	{
-						    		$no = 0;
+						    	if($check > -1){
+						    		$no += 1;
 						    	}
 						    }
-						    if($no == 0)
+						    if($no == count($values))
 						    {
 						    	return 1;
 						    }
