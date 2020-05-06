@@ -25,7 +25,8 @@ class MeProductFollowController extends ApiController
         $data['product_id'] =$product->id;        
         $follow = Follow::create($data);
 
-        $price = $product->prices()->orderBy('created_at','DESC')->pluck('product_price')->first();        
+        $price = $product->prices()->orderBy('created_at','DESC')->pluck('product_price')->first();  
+        $product["str_price"] = $price;        
         $product["price"] = str_replace('.','', $price);
         $provider = $product->provider()->pluck('provider_name')->first();
         $product["provider"] = $provider;

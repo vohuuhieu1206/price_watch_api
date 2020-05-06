@@ -13,7 +13,7 @@ class FollowTransformer extends TransformerAbstract
      *
      * @return array
      */
-    public function transform()
+    public function transform(Follow $follow)
     {
         return [
             //

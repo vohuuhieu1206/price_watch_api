@@ -27,6 +27,7 @@ class MeProductController extends ApiController
         foreach($products as $key => $product)
         {
             $price = $product->prices()->orderBy('created_at','DESC')->pluck('product_price')->first();        
+            $product["str_price"] = $price;        
             $product["price"] = str_replace('.','', $price);
             if($product["price"] == 0) {
                 $products->forget($key);

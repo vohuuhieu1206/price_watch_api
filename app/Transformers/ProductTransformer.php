@@ -30,6 +30,7 @@ class ProductTransformer extends TransformerAbstract
             'image' => (string)$product->link_image,
             'rating' => (string)$product->average_rating,
             'price'=>(int)$product->price,
+            'str_price'=>(string)$product->str_price,
             'provider'=>(string)$product->provider,
             'specification_id' => (int)$product->specification_id,
             'crawlDate' => (string)$product->created_at,

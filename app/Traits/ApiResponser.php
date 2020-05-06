@@ -53,7 +53,27 @@ trait ApiResponser
 				if (isset($attribute, $value)) {
 					$collection = collect($collection)->filter(function ($item) use ($value,$attribute) {
 					    // replace stristr with your choice of matching function
-					    return false !== stripos($item->$attribute, $value);
+					    trim($value);
+					    if(stripos($value," "))
+					    {
+					    	$values = explode(" ",$value);
+						    foreach($values as $str)
+						    {
+						    	$check = stripos($item->$attribute,$str);
+						    	if($check == 0){
+						    		$no = 1;
+						    	}
+						    	else
+						    	{
+						    		$no = 0;
+						    	}
+						    }
+						    if($no == 0)
+						    {
+						    	return 1;
+						    }
+					    }
+					    else return false !== stripos($item->$attribute,$value);
 					});
 				}
 			}

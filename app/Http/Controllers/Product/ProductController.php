@@ -25,8 +25,10 @@ class ProductController extends ApiController
         $products = Product::all();
         foreach($products as $key => $product)
         {
-            $price = $product->prices()->orderBy('created_at','DESC')->pluck('product_price')->first();        
+            $price = $product->prices()->orderBy('created_at','DESC')->pluck('product_price')->first();
+            $product["str_price"] = $price;        
             $product["price"] = str_replace('.','', $price);
+
             if($product["price"] == 0) {
                 $products->forget($key);
             }
@@ -50,6 +52,7 @@ class ProductController extends ApiController
     {
         //
         $price = $product->prices()->orderBy('created_at','DESC')->pluck('product_price')->first();        
+        $product["str_price"] = $price;        
         $product["price"] = str_replace('.','', $price);
         $provider = $product->provider()->pluck('provider_name')->first();
         $product["provider"] = $provider;

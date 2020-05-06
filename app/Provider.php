@@ -16,6 +16,7 @@ class Provider extends Model
     protected $date = ['delete_at'];
     protected $fillable = [
     	'provider_name',
+        'link_logo'
     ];
     protected $hidden = [
         'pivot'
